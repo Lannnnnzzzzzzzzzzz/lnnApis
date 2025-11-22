@@ -469,52 +469,52 @@ async function scrapeEpisodeDetail(slug) {
 }
 
 // ROUTES
-app.get('/anime/home', async (req, res) => {
+app.get('/home', async (req, res) => {
   const data = await scrapeHomePage();
   res.json(data);
 });
 
-app.get('/anime/schedule', async (req, res) => {
+app.get('/schedule', async (req, res) => {
   const data = await scrapeSchedule();
   res.json(data);
 });
 
-app.get('/anime/unlimited', async (req, res) => {
+app.get('/unlimited', async (req, res) => {
   const data = await scrapeUnlimited();
   res.json(data);
 });
 
-app.get('/anime/anime/:slug', async (req, res) => {
+app.get('/anime/:slug', async (req, res) => {
   const { slug } = req.params;
   const data = await scrapeAnimeDetail(slug);
   res.json(data);
 });
 
-app.get('/anime/complete-anime/:page?', async (req, res) => {
+app.get('/complete-anime/:page?', async (req, res) => {
   const page = parseInt(req.params.page) || 1;
   const data = await scrapeCompletedAnime(page);
   res.json(data);
 });
 
-app.get('/anime/ongoing-anime', async (req, res) => {
+app.get('/ongoing-anime', async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const data = await scrapeOngoingAnime(page);
   res.json(data);
 });
 
-app.get('/anime/genre', async (req, res) => {
+app.get('/genre', async (req, res) => {
   const data = await scrapeGenreList();
   res.json(data);
 });
 
-app.get('/anime/genre/:slug', async (req, res) => {
+app.get('/genre/:slug', async (req, res) => {
   const { slug } = req.params;
   const page = parseInt(req.query.page) || 1;
   const data = await scrapeAnimeByGenre(slug, page);
   res.json(data);
 });
 
-app.get('/anime/episode/:slug', async (req, res) => {
+app.get('/episode/:slug', async (req, res) => {
   const { slug } = req.params;
   const data = await scrapeEpisodeDetail(slug);
   res.json(data);
