@@ -1,165 +1,75 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Anime - Otakudesu</title>
+    <title>Otakudesu API Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        body.light-mode { background-color: #ffffff; color: #1a202c; }
+        body.dark-mode { background-color: #1a202c; color: #ffffff; }
+        body::before {
+            content: ''; position: fixed; width: 0; height: 0; border-radius: 50%;
+            background: inherit; z-index: -1000;
+            transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
+            pointer-events: none;
+        }
+        body.animate-light::before { background-color: #ffffff; width: 200vw; height: 200vw; top: var(--circle-top); left: var(--circle-left); }
+        body.animate-dark::before { background-color: #1a202c; width: 200vw; height: 200vw; top: var(--circle-top); left: var(--circle-left); }
+        .method-badge { padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; }
+        .get { background-color: #34d399; color: white; }
+        .code-block {
+            background-color: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem;
+            overflow-x: auto; overflow-y: auto; max-height: 400px;
+            font-family: 'Courier New', Courier, monospace; font-size: 0.875rem;
+        }
+        .input-box {
+            width: 100%; padding: 0.5rem; border-radius: 0.375rem;
+            border: 2px solid #4a5568; background-color: #2d3748; color: #e2e8f0;
+            font-family: monospace; margin-top: 0.5rem;
+        }
+        .try-button {
+            margin-top: 0.5rem; padding: 0.5rem 1rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            color: white; border: none; border-radius: 0.375rem; cursor: pointer; font-weight: 600;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        h1 { color: #333; margin-bottom: 10px; font-size: 2.5em; }
-        .subtitle { color: #666; margin-bottom: 30px; font-size: 1.1em; }
-        .info {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border-left: 4px solid #667eea;
-        }
-        .badge {
-            display: inline-block;
-            background: #28a745;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-        }
-        .endpoint-group { margin-bottom: 30px; }
-        .endpoint-group h2 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.5em;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
-        }
-        .endpoint {
-            background: #f8f9fa;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            border-left: 3px solid #764ba2;
-            transition: all 0.3s ease;
-        }
-        .endpoint:hover { background: #e9ecef; transform: translateX(5px); }
-        .method {
-            display: inline-block;
-            background: #28a745;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.85em;
-            margin-right: 10px;
-        }
-        .path {
-            color: #333;
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
-        }
-        .description { color: #666; margin-top: 8px; font-size: 0.95em; }
-        code {
-            background: #f1f3f5;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            color: #e83e8c;
-        }
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #dee2e6;
-            text-align: center;
-            color: #666;
-        }
+        .loading::after { content: '...'; animation: dots 1.5s steps(4, end) infinite; }
+        @keyframes dots { 0%, 20% { content: '.'; } 40% { content: '..'; } 60%, 100% { content: '...'; } }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>🎌 API Anime Scraper</h1>
-        <p class="subtitle">Scraping data anime dari Otakudesu.best</p>
-
-        <div class="info">
-            <span class="badge">✅ Otakudesu.best</span>
-            <p style="margin-top: 10px;"><strong>Base URL:</strong> <code>https://otakudesu.best</code></p>
-            <p style="margin-top: 5px;"><strong>Status:</strong> Active & Ready</p>
-        </div>
-
-        <div class="endpoint-group">
-            <h2>📺 Endpoints</h2>
-
-            <div class="endpoint">
-                <span class="method">GET</span>
-                <span class="path">/anime/home</span>
-                <p class="description">Halaman utama (ongoing & complete anime)</p>
+<body class="dark-mode font-sans antialiased">
+    <div class="container mx-auto p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-2">Otakudesu API Documentation</h1>
+            <p class="text-lg">Version 1.0.0</p>
+            <button id="theme-toggle" class="mt-4 px-4 py-2 bg-gray-800 text-white rounded">Toggle Light/Dark</button>
+        </header>
+        <section>
+            <h2 class="text-2xl font-semibold mb-6">Available Endpoints</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="p-6 shadow-lg rounded-lg border-l-4 border-green-500 bg-gray-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-bold">/anime/home</h3>
+                        <span class="method-badge get">GET</span>
+                    </div>
+                    <p class="mb-3 text-sm opacity-80">Latest ongoing and completed anime</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">
+                        https://lnncloud.app/apiAnime/anime/home
+                    </div>
+                    <pre class="code-block"><code id="home-example"></code></pre>
+                </div>
             </div>
-
-            <div class="endpoint">
-                <span class="method">GET</span>
-                <span class="path">/anime/schedule</span>
-                <p class="description">Jadwal rilis anime per hari (Senin-Minggu)</p>
-            </div>
-
-            <div class="endpoint">
-                <span class="method">GET</span>
-                <span class="path">/anime/unlimited</span>
-                <p class="description">Daftar semua anime dari A-Z tanpa paginasi</p>
-            </div>
-
-            <div class="endpoint">
-                <span class="method">GET</span>
-                <span class="path">/anime/anime/:slug</span>
-                <p class="description">Detail lengkap anime. Contoh: <code>/anime/anime/one-piece-sub-indo</code></p>
-            </div>
-
-            <div class="endpoint">
-                <span class="method">GET</span>
-                <span class="path">/anime/complete-anime/:page</span>
-                <p class="description">Daftar anime tamat. Contoh: <code>/anime/complete-anime/1</code></p>
-            </div>
-
-            <div class="endpoint">
-                <span class="method">GET</span>
-                <span class="path">/anime/ongoing-anime?page=1</span>
-                <p class="description">Daftar anime ongoing dengan pagination</p>
-            </div>
-
-            <div class="endpoint">
-                <span class="method">GET</span>
-                <span class="path">/anime/genre</span>
-                <p class="description">Daftar semua genre yang tersedia</p>
-            </div>
-
-            <div class="endpoint">
-                <span class="method">GET</span>
-                <span class="path">/anime/genre/:slug?page=1</span>
-                <p class="description">Anime berdasarkan genre. Contoh: <code>/anime/genre/action?page=1</code></p>
-            </div>
-
-            <div class="endpoint">
-                <span class="method">GET</span>
-                <span class="path">/anime/episode/:slug</span>
-                <p class="description">Detail episode & link streaming/download</p>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p><strong>API Anime Scraper v1.0</strong></p>
-            <p>Built with Express.js, Axios, and Cheerio</p>
-            <p style="margin-top: 10px; font-size: 0.9em;">⚠️ API ini hanya untuk tujuan edukasi</p>
-        </div>
+        </section>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script>
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+        });
+        const ex = {"ongoing":[{"title":"Blue Lock S2","episode":"Ep 9"}]};
+        document.getElementById('home-example').textContent = JSON.stringify(ex, null, 2);
+    </script>
 </body>
 </html>
