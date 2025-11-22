@@ -6,70 +6,192 @@
     <title>Otakudesu API Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <meta name="description" content="API created with web scraping nodejs" />
+    <meta name="keywords" content="anime, ongoing anime, anime genres, otakudesu" />
     <style>
         body.light-mode { background-color: #ffffff; color: #1a202c; }
         body.dark-mode { background-color: #1a202c; color: #ffffff; }
-        body::before {
-            content: ''; position: fixed; width: 0; height: 0; border-radius: 50%;
-            background: inherit; z-index: -1000;
-            transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease;
-            pointer-events: none;
-        }
+        body::before { content: ''; position: fixed; width: 0; height: 0; border-radius: 50%; background: inherit; z-index: -1000; transition: width 0.5s ease, height 0.5s ease, top 0.5s ease, left 0.5s ease; pointer-events: none; }
         body.animate-light::before { background-color: #ffffff; width: 200vw; height: 200vw; top: var(--circle-top); left: var(--circle-left); }
         body.animate-dark::before { background-color: #1a202c; width: 200vw; height: 200vw; top: var(--circle-top); left: var(--circle-left); }
         .method-badge { padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; }
         .get { background-color: #34d399; color: white; }
-        .code-block {
-            background-color: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem;
-            overflow-x: auto; overflow-y: auto; max-height: 400px;
-            font-family: 'Courier New', Courier, monospace; font-size: 0.875rem;
-        }
-        .input-box {
-            width: 100%; padding: 0.5rem; border-radius: 0.375rem;
-            border: 2px solid #4a5568; background-color: #2d3748; color: #e2e8f0;
-            font-family: monospace; margin-top: 0.5rem;
-        }
-        .try-button {
-            margin-top: 0.5rem; padding: 0.5rem 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; border: none; border-radius: 0.375rem; cursor: pointer; font-weight: 600;
-        }
+        .code-block { background-color: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; overflow-y: auto; max-height: 400px; font-family: 'Courier New', Courier, monospace; font-size: 0.875rem; line-height: 1.5; white-space: pre; word-wrap: normal; }
+        .input-box { width: 100%; padding: 0.5rem; border-radius: 0.375rem; border: 2px solid #4a5568; background-color: #2d3748; color: #e2e8f0; font-family: monospace; margin-top: 0.5rem; transition: border-color 0.2s; }
+        .input-box:focus { outline: none; border-color: #60a5fa; }
+        .light-mode .input-box { background-color: #f7fafc; color: #1a202c; border-color: #cbd5e0; }
+        .try-button { margin-top: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 0.375rem; cursor: pointer; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; }
+        .try-button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
         .loading::after { content: '...'; animation: dots 1.5s steps(4, end) infinite; }
         @keyframes dots { 0%, 20% { content: '.'; } 40% { content: '..'; } 60%, 100% { content: '...'; } }
+        .light-mode .code-block { background-color: #f7fafc; color: #1a202c; border: 1px solid #e2e8f0; }
+        .light-mode .bg-gray-800 { background-color: #e2e8f0 !important; color: #1a202c !important; }
+        .light-mode .text-green-400 { color: #059669 !important; }
+        .light-mode .text-yellow-400 { color: #d97706 !important; }
     </style>
 </head>
 <body class="dark-mode font-sans antialiased">
     <div class="container mx-auto p-8">
         <header class="text-center mb-12">
             <h1 class="text-4xl font-bold mb-2">Otakudesu API Documentation</h1>
-            <p class="text-lg">Version 1.0.0</p>
-            <button id="theme-toggle" class="mt-4 px-4 py-2 bg-gray-800 text-white rounded">Toggle Light/Dark</button>
+            <p class="text-lg">Version 1.0.0 | Owner: AMWP</p>
+            <button id="theme-toggle" class="mt-4 px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">Toggle Light/Dark Mode</button>
         </header>
         <section>
             <h2 class="text-2xl font-semibold mb-6">Available Endpoints</h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-green-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/anime/home</h3>
+                        <h3 class="text-xl font-bold">/apiAnime/home</h3>
                         <span class="method-badge get">GET</span>
                     </div>
-                    <p class="mb-3 text-sm opacity-80">Latest ongoing and completed anime</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">
-                        https://lnncloud.app/apiAnime/anime/home
-                    </div>
+                    <p class="mb-3 text-sm opacity-80">Get latest ongoing and completed anime</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnncloud.app/apiAnime/home</div>
+                    <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="home-example"></code></pre>
+                </div>
+                <div class="p-6 shadow-lg rounded-lg border-l-4 border-blue-500 bg-gray-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-bold">/apiAnime/schedule</h3>
+                        <span class="method-badge get">GET</span>
+                    </div>
+                    <p class="mb-3 text-sm opacity-80">Get anime release schedule by day</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnncloud.app/apiAnime/schedule</div>
+                    <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
+                    <pre class="code-block"><code id="schedule-example"></code></pre>
+                </div>
+                <div class="p-6 shadow-lg rounded-lg border-l-4 border-purple-500 bg-gray-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-bold">/apiAnime/unlimited</h3>
+                        <span class="method-badge get">GET</span>
+                    </div>
+                    <p class="mb-3 text-sm opacity-80">Get all anime list from A-Z</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnncloud.app/apiAnime/unlimited</div>
+                    <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
+                    <pre class="code-block"><code id="unlimited-example"></code></pre>
+                </div>
+                <div class="p-6 shadow-lg rounded-lg border-l-4 border-pink-500 bg-gray-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-bold">/apiAnime/anime/:slug</h3>
+                        <span class="method-badge get">GET</span>
+                    </div>
+                    <p class="mb-3 text-sm opacity-80">Get anime details and episode list</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnncloud.app/apiAnime/anime/<span class="text-yellow-400">one-piece-sub-indo</span></div>
+                    <input type="text" class="input-box text-sm" placeholder="Anime slug" value="one-piece-sub-indo" id="anime-input">
+                    <button class="try-button" onclick="tryEndpoint('apiAnime/anime', document.getElementById('anime-input').value, 'anime-example')">Try It</button>
+                    <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
+                    <pre class="code-block"><code id="anime-example"></code></pre>
+                </div>
+                <div class="p-6 shadow-lg rounded-lg border-l-4 border-yellow-500 bg-gray-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-bold">/apiAnime/complete-anime/:page</h3>
+                        <span class="method-badge get">GET</span>
+                    </div>
+                    <p class="mb-3 text-sm opacity-80">Get completed anime with pagination</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnncloud.app/apiAnime/complete-anime/<span class="text-yellow-400">1</span></div>
+                    <input type="text" class="input-box text-sm" placeholder="Page number" value="1" id="complete-input">
+                    <button class="try-button" onclick="tryEndpoint('apiAnime/complete-anime', document.getElementById('complete-input').value, 'complete-example')">Try It</button>
+                    <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
+                    <pre class="code-block"><code id="complete-example"></code></pre>
+                </div>
+                <div class="p-6 shadow-lg rounded-lg border-l-4 border-red-500 bg-gray-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-bold">/apiAnime/ongoing-anime</h3>
+                        <span class="method-badge get">GET</span>
+                    </div>
+                    <p class="mb-3 text-sm opacity-80">Get ongoing anime with pagination</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnncloud.app/apiAnime/ongoing-anime?page=<span class="text-yellow-400">1</span></div>
+                    <input type="text" class="input-box text-sm" placeholder="Page number" value="1" id="ongoing-input">
+                    <button class="try-button" onclick="tryEndpoint('apiAnime/ongoing-anime', '?page=' + document.getElementById('ongoing-input').value, 'ongoing-example')">Try It</button>
+                    <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
+                    <pre class="code-block"><code id="ongoing-example"></code></pre>
+                </div>
+                <div class="p-6 shadow-lg rounded-lg border-l-4 border-indigo-500 bg-gray-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-bold">/apiAnime/genre</h3>
+                        <span class="method-badge get">GET</span>
+                    </div>
+                    <p class="mb-3 text-sm opacity-80">Get all available genres</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnncloud.app/apiAnime/genre</div>
+                    <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
+                    <pre class="code-block"><code id="genre-example"></code></pre>
+                </div>
+                <div class="p-6 shadow-lg rounded-lg border-l-4 border-teal-500 bg-gray-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-bold">/apiAnime/genre/:slug</h3>
+                        <span class="method-badge get">GET</span>
+                    </div>
+                    <p class="mb-3 text-sm opacity-80">Get anime by genre with pagination</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnncloud.app/apiAnime/genre/<span class="text-yellow-400">action</span>?page=1</div>
+                    <input type="text" class="input-box text-sm" placeholder="Genre slug" value="action" id="genre-slug-input">
+                    <button class="try-button" onclick="tryEndpoint('apiAnime/genre', document.getElementById('genre-slug-input').value + '?page=1', 'genre-slug-example')">Try It</button>
+                    <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
+                    <pre class="code-block"><code id="genre-slug-example"></code></pre>
+                </div>
+                <div class="p-6 shadow-lg rounded-lg border-l-4 border-orange-500 bg-gray-800">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-bold">/apiAnime/episode/:slug</h3>
+                        <span class="method-badge get">GET</span>
+                    </div>
+                    <p class="mb-3 text-sm opacity-80">Get episode details and streaming links</p>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnncloud.app/apiAnime/episode/<span class="text-yellow-400">one-piece-episode-1000-sub-indo</span></div>
+                    <input type="text" class="input-box text-sm" placeholder="Episode slug" value="one-piece-episode-1000-sub-indo" id="episode-input">
+                    <button class="try-button" onclick="tryEndpoint('apiAnime/episode', document.getElementById('episode-input').value, 'episode-example')">Try It</button>
+                    <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
+                    <pre class="code-block"><code id="episode-example"></code></pre>
                 </div>
             </div>
         </section>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
     <script>
         document.getElementById('theme-toggle').addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            document.body.classList.toggle('light-mode');
+            const body = document.body;
+            const rect = document.getElementById('theme-toggle').getBoundingClientRect();
+            const circleTop = rect.top + rect.height / 2 - window.innerHeight;
+            const circleLeft = rect.left + rect.width / 2 - window.innerWidth;
+            body.style.setProperty('--circle-top', circleTop + 'px');
+            body.style.setProperty('--circle-left', circleLeft + 'px');
+            if (body.classList.contains('dark-mode')) {
+                body.classList.add('animate-light');
+                setTimeout(() => { body.classList.remove('dark-mode', 'animate-light'); body.classList.add('light-mode'); }, 500);
+            } else {
+                body.classList.add('animate-dark');
+                setTimeout(() => { body.classList.remove('light-mode', 'animate-dark'); body.classList.add('dark-mode'); }, 500);
+            }
         });
-        const ex = {"ongoing":[{"title":"Blue Lock S2","episode":"Ep 9"}]};
-        document.getElementById('home-example').textContent = JSON.stringify(ex, null, 2);
+        function typeWriter(element, text) { element.textContent = text; Prism.highlightElement(element); }
+        async function tryEndpoint(type, param, exampleId) {
+            const url = 'https://lnncloud.app/' + type + '/' + param;
+            const exampleElement = document.getElementById(exampleId);
+            exampleElement.parentElement.classList.add('loading');
+            exampleElement.textContent = 'Loading';
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                exampleElement.parentElement.classList.remove('loading');
+                typeWriter(exampleElement, JSON.stringify(data, null, 2));
+            } catch (error) {
+                exampleElement.parentElement.classList.remove('loading');
+                typeWriter(exampleElement, JSON.stringify({ error: 'Failed to fetch', message: error.message }, null, 2));
+            }
+        }
+        const examples = {
+            'home-example': {"ongoing":[{"title":"Blue Lock S2","episode":"Ep 9"}],"complete":[{"title":"JJK S2","episode":"23 Ep"}]},
+            'schedule-example': {"monday":[{"title":"One Piece","slug":"one-piece"}],"friday":[{"title":"Blue Lock S2"}]},
+            'unlimited-example': {"A":[{"title":"Attack on Titan"}],"B":[{"title":"Bleach"}]},
+            'anime-example': {"title":"One Piece","japaneseTitle":"ワンピース","genres":["Action","Adventure"]},
+            'complete-example': {"data":[{"title":"SAO Alicization","episode":"24 Ep"}],"pagination":{"currentPage":1}},
+            'ongoing-example': {"data":[{"title":"Blue Lock S2","episode":"Ep 9"}],"pagination":{"currentPage":1}},
+            'genre-example': [{"name":"Action","slug":"action"},{"name":"Adventure","slug":"adventure"}],
+            'genre-slug-example': {"genre":"Action","data":[{"title":"One Punch Man S3"}],"pagination":{"currentPage":1}},
+            'episode-example': {"title":"One Piece Episode 1000","downloadLinks":{"quality_720p":[{"provider":"GDrive"}]},"streamingLinks":[{"server":"Desustream"}]}
+        };
+        Object.keys(examples).forEach(exampleId => {
+            const el = document.getElementById(exampleId);
+            if (el) typeWriter(el, JSON.stringify(examples[exampleId], null, 2));
+        });
     </script>
 </body>
 </html>
