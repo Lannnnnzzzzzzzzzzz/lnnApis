@@ -5,11 +5,16 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
-const BASE_URL = 'https://otakudesu.best';
+const BASE_URLS = {
+  ota: 'https://otakudesu.best',
+  kur: 'https://kuronime.moe',
+  bor: 'https://bornime.com'
+};
 
-async function scrapeHomePage() {
+// OTAKUDESU SCRAPERS
+async function scrapeHomePageOta(baseUrl) {
   try {
-    const { data } = await axios.get(BASE_URL);
+    const { data } = await axios.get(baseUrl);
     const $ = cheerio.load(data);
 
     const results = {
@@ -19,42 +24,46 @@ async function scrapeHomePage() {
 
     $('.venz ul li').each((index, element) => {
       const title = $(element).find('h2.jdlflm').text().trim();
-      const href = $(element).find('.thumbz a').attr('href') || '';
-      const slug = href.replace(BASE_URL + '/anime/', '').replace('/', '');
-      const imgSrc = $(element).find('.thumbz img').attr('src');
+      const href = $(element).find('.thumb a').attr('href') || $(element).find('.thumbz a').attr('href') || '';
+      const slug = href ? href.split('/').filter(Boolean).pop() : '';
+      const imgSrc = $(element).find('.thumbz img').attr('src') || $(element).find('.thumb img').attr('src');
       const episode = $(element).find('.epz').text().trim();
       const day = $(element).find('.epztipe').text().trim();
       const date = $(element).find('.newnime').text().trim();
 
-      results.ongoing.push({
-        title,
-        slug,
-        href,
-        image: imgSrc,
-        episode,
-        day,
-        date
-      });
+      if (title) {
+        results.ongoing.push({
+          title,
+          slug,
+          href,
+          image: imgSrc,
+          episode,
+          day,
+          date
+        });
+      }
     });
 
     $('.rseries .rapi .venz ul li').each((index, element) => {
       const title = $(element).find('h2.jdlflm').text().trim();
-      const href = $(element).find('.thumbz a').attr('href') || '';
-      const slug = href.replace(BASE_URL + '/anime/', '').replace('/', '');
-      const imgSrc = $(element).find('.thumbz img').attr('src');
+      const href = $(element).find('.thumbz a').attr('href') || $(element).find('.thumb a').attr('href') || '';
+      const slug = href ? href.split('/').filter(Boolean).pop() : '';
+      const imgSrc = $(element).find('.thumbz img').attr('src') || $(element).find('.thumb img').attr('src');
       const episode = $(element).find('.epz').text().trim();
       const rating = $(element).find('.epztipe').text().trim();
       const date = $(element).find('.newnime').text().trim();
 
-      results.complete.push({
-        title,
-        slug,
-        href,
-        image: imgSrc,
-        episode,
-        rating,
-        date
-      });
+      if (title) {
+        results.complete.push({
+          title,
+          slug,
+          href,
+          image: imgSrc,
+          episode,
+          rating,
+          date
+        });
+      }
     });
 
     return results;
@@ -64,9 +73,9 @@ async function scrapeHomePage() {
   }
 }
 
-async function scrapeSchedule() {
+async function scrapeScheduleOta(baseUrl) {
   try {
-    const { data } = await axios.get(`${BASE_URL}/jadwal-rilis/`);
+    const { data } = await axios.get(`${baseUrl}/jadwal-rilis/`);
     const $ = cheerio.load(data);
 
     const schedule = {
@@ -97,13 +106,15 @@ async function scrapeSchedule() {
         $(element).find('ul li').each((i, el) => {
           const title = $(el).find('a').text().trim();
           const href = $(el).find('a').attr('href') || '';
-          const slug = href.replace(BASE_URL + '/anime/', '').replace('/', '');
+          const slug = href ? href.split('/').filter(Boolean).pop() : '';
 
-          schedule[dayKey].push({
-            title,
-            slug,
-            href
-          });
+          if (title) {
+            schedule[dayKey].push({
+              title,
+              slug,
+              href
+            });
+          }
         });
       }
     });
@@ -115,9 +126,9 @@ async function scrapeSchedule() {
   }
 }
 
-async function scrapeUnlimited() {
+async function scrapeUnlimitedOta(baseUrl) {
   try {
-    const { data } = await axios.get(`${BASE_URL}/anime-list/`);
+    const { data } = await axios.get(`${baseUrl}/anime-list/`);
     const $ = cheerio.load(data);
 
     const results = {};
@@ -129,16 +140,18 @@ async function scrapeUnlimited() {
       $(element).find('.jdlbar').each((i, el) => {
         const title = $(el).text().trim();
         const href = $(el).attr('href') || '';
-        const slug = href.replace(BASE_URL + '/anime/', '').replace('/', '');
+        const slug = href ? href.split('/').filter(Boolean).pop() : '';
 
-        animeList.push({
-          title,
-          slug,
-          href
-        });
+        if (title) {
+          animeList.push({
+            title,
+            slug,
+            href
+          });
+        }
       });
 
-      if (letter) {
+      if (letter && animeList.length > 0) {
         results[letter] = animeList;
       }
     });
@@ -150,11 +163,9 @@ async function scrapeUnlimited() {
   }
 }
 
-async function scrapeAnimeDetail(slug) {
+async function scrapeAnimeDetailOta(baseUrl, slug) {
   try {
-    const url = `${BASE_URL}/anime/${slug}/`;
-    console.log('Scraping Anime URL:', url);
-
+    const url = `${baseUrl}/anime/${slug}/`;
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
@@ -188,15 +199,17 @@ async function scrapeAnimeDetail(slug) {
     $('.episodelist ul li').each((i, el) => {
       const episodeTitle = $(el).find('span a').text().trim();
       const episodeHref = $(el).find('span a').attr('href') || '';
-      const episodeSlug = episodeHref.replace(BASE_URL + '/episode/', '').replace('/', '');
+      const episodeSlug = episodeHref ? episodeHref.split('/').filter(Boolean).pop() : '';
       const episodeDate = $(el).find('.zeebr').text().trim();
 
-      episodeList.push({
-        title: episodeTitle,
-        slug: episodeSlug,
-        href: episodeHref,
-        date: episodeDate
-      });
+      if (episodeTitle) {
+        episodeList.push({
+          title: episodeTitle,
+          slug: episodeSlug,
+          href: episodeHref,
+          date: episodeDate
+        });
+      }
     });
 
     return {
@@ -214,11 +227,11 @@ async function scrapeAnimeDetail(slug) {
   }
 }
 
-async function scrapeCompletedAnime(page = 1) {
+async function scrapeCompletedAnimeOta(baseUrl, page = 1) {
   try {
     const url = page === 1
-      ? `${BASE_URL}/complete-anime/`
-      : `${BASE_URL}/complete-anime/page/${page}/`;
+      ? `${baseUrl}/complete-anime/`
+      : `${baseUrl}/complete-anime/page/${page}/`;
 
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -227,22 +240,24 @@ async function scrapeCompletedAnime(page = 1) {
 
     $('.venz ul li').each((index, element) => {
       const title = $(element).find('h2.jdlflm').text().trim();
-      const href = $(element).find('.thumbz a').attr('href') || '';
-      const slug = href.replace(BASE_URL + '/anime/', '').replace('/', '');
-      const imgSrc = $(element).find('.thumbz img').attr('src');
+      const href = $(element).find('.thumbz a').attr('href') || $(element).find('.thumb a').attr('href') || '';
+      const slug = href ? href.split('/').filter(Boolean).pop() : '';
+      const imgSrc = $(element).find('.thumbz img').attr('src') || $(element).find('.thumb img').attr('src');
       const episode = $(element).find('.epz').text().trim();
       const rating = $(element).find('.epztipe').text().trim();
       const date = $(element).find('.newnime').text().trim();
 
-      results.push({
-        title,
-        slug,
-        href,
-        image: imgSrc,
-        episode,
-        rating,
-        date
-      });
+      if (title) {
+        results.push({
+          title,
+          slug,
+          href,
+          image: imgSrc,
+          episode,
+          rating,
+          date
+        });
+      }
     });
 
     const pagination = {
@@ -258,11 +273,11 @@ async function scrapeCompletedAnime(page = 1) {
   }
 }
 
-async function scrapeOngoingAnime(page = 1) {
+async function scrapeOngoingAnimeOta(baseUrl, page = 1) {
   try {
     const url = page === 1
-      ? `${BASE_URL}/ongoing-anime/`
-      : `${BASE_URL}/ongoing-anime/page/${page}/`;
+      ? `${baseUrl}/ongoing-anime/`
+      : `${baseUrl}/ongoing-anime/page/${page}/`;
 
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -271,22 +286,24 @@ async function scrapeOngoingAnime(page = 1) {
 
     $('.venz ul li').each((index, element) => {
       const title = $(element).find('h2.jdlflm').text().trim();
-      const href = $(element).find('.thumbz a').attr('href') || '';
-      const slug = href.replace(BASE_URL + '/anime/', '').replace('/', '');
-      const imgSrc = $(element).find('.thumbz img').attr('src');
+      const href = $(element).find('.thumbz a').attr('href') || $(element).find('.thumb a').attr('href') || '';
+      const slug = href ? href.split('/').filter(Boolean).pop() : '';
+      const imgSrc = $(element).find('.thumbz img').attr('src') || $(element).find('.thumb img').attr('src');
       const episode = $(element).find('.epz').text().trim();
       const day = $(element).find('.epztipe').text().trim();
       const date = $(element).find('.newnime').text().trim();
 
-      results.push({
-        title,
-        slug,
-        href,
-        image: imgSrc,
-        episode,
-        day,
-        date
-      });
+      if (title) {
+        results.push({
+          title,
+          slug,
+          href,
+          image: imgSrc,
+          episode,
+          day,
+          date
+        });
+      }
     });
 
     const pagination = {
@@ -302,9 +319,9 @@ async function scrapeOngoingAnime(page = 1) {
   }
 }
 
-async function scrapeGenreList() {
+async function scrapeGenreListOta(baseUrl) {
   try {
-    const { data } = await axios.get(`${BASE_URL}/genre-list/`);
+    const { data } = await axios.get(`${baseUrl}/genre-list/`);
     const $ = cheerio.load(data);
 
     const genres = [];
@@ -312,13 +329,15 @@ async function scrapeGenreList() {
     $('.genres li a').each((i, el) => {
       const name = $(el).text().trim();
       const href = $(el).attr('href') || '';
-      const slug = href.replace(BASE_URL + '/genres/', '').replace('/', '');
+      const slug = href ? href.split('/').filter(Boolean).pop() : '';
 
-      genres.push({
-        name,
-        slug,
-        href
-      });
+      if (name) {
+        genres.push({
+          name,
+          slug,
+          href
+        });
+      }
     });
 
     return genres;
@@ -328,11 +347,11 @@ async function scrapeGenreList() {
   }
 }
 
-async function scrapeAnimeByGenre(slug, page = 1) {
+async function scrapeAnimeByGenreOta(baseUrl, slug, page = 1) {
   try {
     const url = page === 1
-      ? `${BASE_URL}/genres/${slug}/`
-      : `${BASE_URL}/genres/${slug}/page/${page}/`;
+      ? `${baseUrl}/genres/${slug}/`
+      : `${baseUrl}/genres/${slug}/page/${page}/`;
 
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -343,23 +362,25 @@ async function scrapeAnimeByGenre(slug, page = 1) {
     $('.col-anime .col-anime-con').each((index, element) => {
       const title = $(element).find('.col-anime-title a').text().trim();
       const href = $(element).find('.col-anime-title a').attr('href') || '';
-      const animeSlug = href.replace(BASE_URL + '/anime/', '').replace('/', '');
+      const animeSlug = href ? href.split('/').filter(Boolean).pop() : '';
       const imgSrc = $(element).find('.col-anime-cover img').attr('src');
       const studio = $(element).find('.col-anime-studio').text().trim();
       const episode = $(element).find('.col-anime-eps').text().trim();
       const rating = $(element).find('.col-anime-rating').text().trim();
       const synopsis = $(element).find('.col-synopsis p').text().trim();
 
-      results.push({
-        title,
-        slug: animeSlug,
-        href,
-        image: imgSrc,
-        studio,
-        episode,
-        rating,
-        synopsis
-      });
+      if (title) {
+        results.push({
+          title,
+          slug: animeSlug,
+          href,
+          image: imgSrc,
+          studio,
+          episode,
+          rating,
+          synopsis
+        });
+      }
     });
 
     const pagination = {
@@ -379,11 +400,9 @@ async function scrapeAnimeByGenre(slug, page = 1) {
   }
 }
 
-async function scrapeEpisodeDetail(slug) {
+async function scrapeEpisodeDetailOta(baseUrl, slug) {
   try {
-    const url = `${BASE_URL}/episode/${slug}/`;
-    console.log('Scraping Episode URL:', url);
-
+    const url = `${baseUrl}/episode/${slug}/`;
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
@@ -405,10 +424,12 @@ async function scrapeEpisodeDetail(slug) {
         const provider = $(link).text().trim();
         const href = $(link).attr('href') || '';
 
-        links.push({
-          provider,
-          url: href
-        });
+        if (provider && href) {
+          links.push({
+            provider,
+            url: href
+          });
+        }
       });
 
       if (quality.includes('360p')) streamLinks.quality_360p = links;
@@ -424,11 +445,13 @@ async function scrapeEpisodeDetail(slug) {
         const quality = $(link).text().trim();
         const href = $(link).attr('href') || '';
 
-        mirrorLinks.push({
-          server,
-          quality,
-          url: href
-        });
+        if (quality && href) {
+          mirrorLinks.push({
+            server,
+            quality,
+            url: href
+          });
+        }
       });
     });
 
@@ -450,55 +473,171 @@ async function scrapeEpisodeDetail(slug) {
   }
 }
 
-app.get('/anime/home', async (req, res) => {
-  const data = await scrapeHomePage();
+// KURONIME & BORNIME SCRAPERS (struktur mirip dengan Otakudesu, tinggal sesuaikan selector)
+async function scrapeHomePageKurBor(baseUrl) {
+  try {
+    const { data } = await axios.get(baseUrl);
+    const $ = cheerio.load(data);
+
+    const results = {
+      ongoing: [],
+      complete: []
+    };
+
+    // Selector untuk Kuronime/Bornime (sesuaikan dengan struktur HTML mereka)
+    $('.post-show ul li, .items article').each((index, element) => {
+      const title = $(element).find('h2, .entry-title').text().trim();
+      const href = $(element).find('a').first().attr('href') || '';
+      const slug = href ? href.split('/').filter(Boolean).pop() : '';
+      const imgSrc = $(element).find('img').attr('src') || $(element).find('img').attr('data-src');
+      const episode = $(element).find('.episode, .type').text().trim();
+
+      if (title) {
+        results.ongoing.push({
+          title,
+          slug,
+          href,
+          image: imgSrc,
+          episode,
+          day: '',
+          date: ''
+        });
+      }
+    });
+
+    return results;
+  } catch (error) {
+    console.error('Error scraping home page:', error.message);
+    return { ongoing: [], complete: [] };
+  }
+}
+
+// ROUTING
+app.get('/a/ota/home', async (req, res) => {
+  const data = await scrapeHomePageOta(BASE_URLS.ota);
   res.json(data);
 });
 
-app.get('/anime/schedule', async (req, res) => {
-  const data = await scrapeSchedule();
+app.get('/a/ota/schedule', async (req, res) => {
+  const data = await scrapeScheduleOta(BASE_URLS.ota);
   res.json(data);
 });
 
-app.get('/anime/unlimited', async (req, res) => {
-  const data = await scrapeUnlimited();
+app.get('/a/ota/unlimited', async (req, res) => {
+  const data = await scrapeUnlimitedOta(BASE_URLS.ota);
   res.json(data);
 });
 
-app.get('/anime/anime/:slug', async (req, res) => {
+app.get('/a/ota/anime/:slug', async (req, res) => {
   const { slug } = req.params;
-  const data = await scrapeAnimeDetail(slug);
+  const data = await scrapeAnimeDetailOta(BASE_URLS.ota, slug);
   res.json(data);
 });
 
-app.get('/anime/complete-anime/:page?', async (req, res) => {
+app.get('/a/ota/complete-anime/:page?', async (req, res) => {
   const page = parseInt(req.params.page) || 1;
-  const data = await scrapeCompletedAnime(page);
+  const data = await scrapeCompletedAnimeOta(BASE_URLS.ota, page);
   res.json(data);
 });
 
-app.get('/anime/ongoing-anime', async (req, res) => {
+app.get('/a/ota/ongoing-anime', async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const data = await scrapeOngoingAnime(page);
+  const data = await scrapeOngoingAnimeOta(BASE_URLS.ota, page);
   res.json(data);
 });
 
-app.get('/anime/genre', async (req, res) => {
-  const data = await scrapeGenreList();
+app.get('/a/ota/genre', async (req, res) => {
+  const data = await scrapeGenreListOta(BASE_URLS.ota);
   res.json(data);
 });
 
-app.get('/anime/genre/:slug', async (req, res) => {
+app.get('/a/ota/genre/:slug', async (req, res) => {
   const { slug } = req.params;
   const page = parseInt(req.query.page) || 1;
-  const data = await scrapeAnimeByGenre(slug, page);
+  const data = await scrapeAnimeByGenreOta(BASE_URLS.ota, slug, page);
   res.json(data);
 });
 
-app.get('/anime/episode/:slug', async (req, res) => {
+app.get('/a/ota/episode/:slug', async (req, res) => {
   const { slug } = req.params;
-  const data = await scrapeEpisodeDetail(slug);
+  const data = await scrapeEpisodeDetailOta(BASE_URLS.ota, slug);
   res.json(data);
+});
+
+// KURONIME ROUTES
+app.get('/a/kur/home', async (req, res) => {
+  const data = await scrapeHomePageKurBor(BASE_URLS.kur);
+  res.json(data);
+});
+
+app.get('/a/kur/schedule', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/kur/unlimited', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/kur/anime/:slug', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/kur/complete-anime/:page?', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/kur/ongoing-anime', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/kur/genre', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/kur/genre/:slug', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/kur/episode/:slug', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+// BORNIME ROUTES
+app.get('/a/bor/home', async (req, res) => {
+  const data = await scrapeHomePageKurBor(BASE_URLS.bor);
+  res.json(data);
+});
+
+app.get('/a/bor/schedule', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/bor/unlimited', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/bor/anime/:slug', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/bor/complete-anime/:page?', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/bor/ongoing-anime', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/bor/genre', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/bor/genre/:slug', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
+});
+
+app.get('/a/bor/episode/:slug', async (req, res) => {
+  res.json({ message: 'Coming soon - Need HTML structure' });
 });
 
 app.get('/', (req, res) => {

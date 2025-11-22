@@ -47,6 +47,32 @@
             border-left: 4px solid #667eea;
         }
 
+        .source-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .source-tab {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            background: #e9ecef;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .source-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .source-tab.coming-soon {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .endpoints {
             margin-top: 30px;
         }
@@ -119,12 +145,34 @@
             margin-bottom: 10px;
         }
 
+        .badge.ready {
+            background: #28a745;
+        }
+
+        .badge.coming-soon {
+            background: #ffc107;
+            color: #333;
+        }
+
         code {
             background: #f1f3f5;
             padding: 2px 6px;
             border-radius: 3px;
             font-family: 'Courier New', monospace;
             color: #e83e8c;
+        }
+
+        .url-pattern {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 3px solid #667eea;
+        }
+
+        .url-pattern h3 {
+            color: #667eea;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -135,79 +183,113 @@
 
         <div class="info">
             <div style="margin-bottom: 15px;">
-                <span class="badge">Otakudesu.best</span>
-                <span class="badge">Kuronime.moe</span>
-                <span class="badge">Bornime.com</span>
+                <span class="badge ready">Otakudesu.best ✅</span>
+                <span class="badge coming-soon">Kuronime.moe 🚧</span>
+                <span class="badge coming-soon">Bornime.com 🚧</span>
             </div>
-            <p><strong>Base URL:</strong> <code>https://otakudesu.best</code> (default)</p>
-            <p style="margin-top: 8px;"><strong>Status:</strong> ✅ Active & Ready</p>
+            <p><strong>Status:</strong> Otakudesu endpoints ready | Kuronime & Bornime coming soon</p>
+        </div>
+
+        <div class="url-pattern">
+            <h3>📍 URL Pattern</h3>
+            <p><code>/a/{source}/{endpoint}</code></p>
+            <p style="margin-top: 10px;">
+                <strong>Sources:</strong><br>
+                <code>ota</code> = Otakudesu |
+                <code>kur</code> = Kuronime |
+                <code>bor</code> = Bornime
+            </p>
         </div>
 
         <div class="endpoints">
             <div class="endpoint-group">
-                <h2>📺 Halaman Utama</h2>
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/anime/home</span>
-                    <p class="description">Mendapatkan data dari halaman utama (ongoing & complete anime)</p>
-                </div>
-            </div>
+                <h2>📺 Otakudesu Endpoints (Ready)</h2>
 
-            <div class="endpoint-group">
-                <h2>📅 Jadwal Rilis</h2>
                 <div class="endpoint">
                     <span class="method">GET</span>
-                    <span class="path">/anime/schedule</span>
-                    <p class="description">Mendapatkan jadwal rilis anime per hari (Senin-Minggu)</p>
+                    <span class="path">/a/ota/home</span>
+                    <p class="description">Halaman utama (ongoing & complete anime)</p>
                 </div>
-            </div>
 
-            <div class="endpoint-group">
-                <h2>📚 Daftar Anime</h2>
                 <div class="endpoint">
                     <span class="method">GET</span>
-                    <span class="path">/anime/unlimited</span>
+                    <span class="path">/a/ota/schedule</span>
+                    <p class="description">Jadwal rilis anime per hari (Senin-Minggu)</p>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/a/ota/unlimited</span>
                     <p class="description">Daftar semua anime dari A-Z tanpa paginasi</p>
                 </div>
+
                 <div class="endpoint">
                     <span class="method">GET</span>
-                    <span class="path">/anime/complete-anime/:page</span>
-                    <p class="description">Daftar anime tamat berdasarkan halaman. Contoh: <code>/anime/complete-anime/1</code></p>
+                    <span class="path">/a/ota/anime/:slug</span>
+                    <p class="description">Detail lengkap sebuah anime. Contoh: <code>/a/ota/anime/one-piece-sub-indo</code></p>
                 </div>
+
                 <div class="endpoint">
                     <span class="method">GET</span>
-                    <span class="path">/anime/ongoing-anime?page=1</span>
+                    <span class="path">/a/ota/complete-anime/:page</span>
+                    <p class="description">Daftar anime tamat berdasarkan halaman. Contoh: <code>/a/ota/complete-anime/1</code></p>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/a/ota/ongoing-anime?page=1</span>
                     <p class="description">Daftar anime yang sedang tayang (ongoing) dengan pagination</p>
                 </div>
-            </div>
 
-            <div class="endpoint-group">
-                <h2>🎭 Genre</h2>
                 <div class="endpoint">
                     <span class="method">GET</span>
-                    <span class="path">/anime/genre</span>
+                    <span class="path">/a/ota/genre</span>
                     <p class="description">Daftar semua genre yang tersedia</p>
                 </div>
+
                 <div class="endpoint">
                     <span class="method">GET</span>
-                    <span class="path">/anime/genre/:slug?page=1</span>
-                    <p class="description">Anime berdasarkan genre tertentu dengan pagination. Contoh: <code>/anime/genre/action?page=1</code></p>
+                    <span class="path">/a/ota/genre/:slug?page=1</span>
+                    <p class="description">Anime berdasarkan genre tertentu. Contoh: <code>/a/ota/genre/action?page=1</code></p>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/a/ota/episode/:slug</span>
+                    <p class="description">Detail episode & link streaming/download</p>
                 </div>
             </div>
 
             <div class="endpoint-group">
-                <h2>📖 Detail</h2>
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/anime/anime/:slug</span>
-                    <p class="description">Mendapatkan detail lengkap sebuah anime. Contoh: <code>/anime/anime/one-piece-sub-indo</code></p>
-                </div>
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/anime/episode/:slug</span>
-                    <p class="description">Detail episode & link streaming/download. Contoh: <code>/anime/episode/one-piece-episode-1000-sub-indo</code></p>
-                </div>
+                <h2>🚧 Kuronime Endpoints (Coming Soon)</h2>
+                <p style="color: #666; font-style: italic;">
+                    Endpoints untuk Kuronime sedang dalam tahap development.
+                    Membutuhkan struktur HTML dari kuronime.moe.
+                </p>
+                <p style="margin-top: 10px; color: #666;">
+                    Semua endpoint akan sama dengan Otakudesu, hanya ganti <code>/a/ota/</code> menjadi <code>/a/kur/</code>
+                </p>
             </div>
+
+            <div class="endpoint-group">
+                <h2>🚧 Bornime Endpoints (Coming Soon)</h2>
+                <p style="color: #666; font-style: italic;">
+                    Endpoints untuk Bornime sedang dalam tahap development.
+                    Membutuhkan struktur HTML dari bornime.com.
+                </p>
+                <p style="margin-top: 10px; color: #666;">
+                    Semua endpoint akan sama dengan Otakudesu, hanya ganti <code>/a/ota/</code> menjadi <code>/a/bor/</code>
+                </p>
+            </div>
+        </div>
+
+        <div class="url-pattern">
+            <h3>📚 Dokumentasi Lengkap</h3>
+            <ul style="margin-top: 10px; margin-left: 20px;">
+                <li><strong>hasil-otaku.md</strong> - Dokumentasi Otakudesu dengan contoh response</li>
+                <li><strong>hasil-kuronime.md</strong> - Dokumentasi Kuronime (Coming Soon)</li>
+                <li><strong>hasil-bornime.md</strong> - Dokumentasi Bornime (Coming Soon)</li>
+            </ul>
         </div>
 
         <div class="footer">
