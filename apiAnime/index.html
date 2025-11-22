@@ -3,21 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Anime - Otakudesu, Kuronime, Bornime</title>
+    <title>API Anime - Otakudesu</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -26,19 +20,8 @@
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-
+        h1 { color: #333; margin-bottom: 10px; font-size: 2.5em; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 1.1em; }
         .info {
             background: #f8f9fa;
             padding: 20px;
@@ -46,41 +29,15 @@
             margin-bottom: 30px;
             border-left: 4px solid #667eea;
         }
-
-        .source-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .source-tab {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            background: #e9ecef;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .source-tab.active {
-            background: #667eea;
+        .badge {
+            display: inline-block;
+            background: #28a745;
             color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
         }
-
-        .source-tab.coming-soon {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .endpoints {
-            margin-top: 30px;
-        }
-
-        .endpoint-group {
-            margin-bottom: 30px;
-        }
-
+        .endpoint-group { margin-bottom: 30px; }
         .endpoint-group h2 {
             color: #667eea;
             margin-bottom: 15px;
@@ -88,7 +45,6 @@
             border-bottom: 2px solid #667eea;
             padding-bottom: 10px;
         }
-
         .endpoint {
             background: #f8f9fa;
             padding: 15px;
@@ -97,12 +53,7 @@
             border-left: 3px solid #764ba2;
             transition: all 0.3s ease;
         }
-
-        .endpoint:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-
+        .endpoint:hover { background: #e9ecef; transform: translateX(5px); }
         .method {
             display: inline-block;
             background: #28a745;
@@ -113,47 +64,12 @@
             font-size: 0.85em;
             margin-right: 10px;
         }
-
         .path {
             color: #333;
             font-family: 'Courier New', monospace;
             font-weight: 600;
         }
-
-        .description {
-            color: #666;
-            margin-top: 8px;
-            font-size: 0.95em;
-        }
-
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #dee2e6;
-            text-align: center;
-            color: #666;
-        }
-
-        .badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-
-        .badge.ready {
-            background: #28a745;
-        }
-
-        .badge.coming-soon {
-            background: #ffc107;
-            color: #333;
-        }
-
+        .description { color: #666; margin-top: 8px; font-size: 0.95em; }
         code {
             background: #f1f3f5;
             padding: 2px 6px;
@@ -161,141 +77,88 @@
             font-family: 'Courier New', monospace;
             color: #e83e8c;
         }
-
-        .url-pattern {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 20px 0;
-            border-left: 3px solid #667eea;
-        }
-
-        .url-pattern h3 {
-            color: #667eea;
-            margin-bottom: 10px;
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            text-align: center;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎌 API Anime Scraper</h1>
-        <p class="subtitle">Scraping data anime dari Otakudesu, Kuronime, dan Bornime</p>
+        <p class="subtitle">Scraping data anime dari Otakudesu.best</p>
 
         <div class="info">
-            <div style="margin-bottom: 15px;">
-                <span class="badge ready">Otakudesu.best ✅</span>
-                <span class="badge coming-soon">Kuronime.moe 🚧</span>
-                <span class="badge coming-soon">Bornime.com 🚧</span>
-            </div>
-            <p><strong>Status:</strong> Otakudesu endpoints ready | Kuronime & Bornime coming soon</p>
+            <span class="badge">✅ Otakudesu.best</span>
+            <p style="margin-top: 10px;"><strong>Base URL:</strong> <code>https://otakudesu.best</code></p>
+            <p style="margin-top: 5px;"><strong>Status:</strong> Active & Ready</p>
         </div>
 
-        <div class="url-pattern">
-            <h3>📍 URL Pattern</h3>
-            <p><code>/a/{source}/{endpoint}</code></p>
-            <p style="margin-top: 10px;">
-                <strong>Sources:</strong><br>
-                <code>ota</code> = Otakudesu |
-                <code>kur</code> = Kuronime |
-                <code>bor</code> = Bornime
-            </p>
-        </div>
+        <div class="endpoint-group">
+            <h2>📺 Endpoints</h2>
 
-        <div class="endpoints">
-            <div class="endpoint-group">
-                <h2>📺 Otakudesu Endpoints (Ready)</h2>
-
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/a/ota/home</span>
-                    <p class="description">Halaman utama (ongoing & complete anime)</p>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/a/ota/schedule</span>
-                    <p class="description">Jadwal rilis anime per hari (Senin-Minggu)</p>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/a/ota/unlimited</span>
-                    <p class="description">Daftar semua anime dari A-Z tanpa paginasi</p>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/a/ota/anime/:slug</span>
-                    <p class="description">Detail lengkap sebuah anime. Contoh: <code>/a/ota/anime/one-piece-sub-indo</code></p>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/a/ota/complete-anime/:page</span>
-                    <p class="description">Daftar anime tamat berdasarkan halaman. Contoh: <code>/a/ota/complete-anime/1</code></p>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/a/ota/ongoing-anime?page=1</span>
-                    <p class="description">Daftar anime yang sedang tayang (ongoing) dengan pagination</p>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/a/ota/genre</span>
-                    <p class="description">Daftar semua genre yang tersedia</p>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/a/ota/genre/:slug?page=1</span>
-                    <p class="description">Anime berdasarkan genre tertentu. Contoh: <code>/a/ota/genre/action?page=1</code></p>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method">GET</span>
-                    <span class="path">/a/ota/episode/:slug</span>
-                    <p class="description">Detail episode & link streaming/download</p>
-                </div>
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/anime/home</span>
+                <p class="description">Halaman utama (ongoing & complete anime)</p>
             </div>
 
-            <div class="endpoint-group">
-                <h2>🚧 Kuronime Endpoints (Coming Soon)</h2>
-                <p style="color: #666; font-style: italic;">
-                    Endpoints untuk Kuronime sedang dalam tahap development.
-                    Membutuhkan struktur HTML dari kuronime.moe.
-                </p>
-                <p style="margin-top: 10px; color: #666;">
-                    Semua endpoint akan sama dengan Otakudesu, hanya ganti <code>/a/ota/</code> menjadi <code>/a/kur/</code>
-                </p>
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/anime/schedule</span>
+                <p class="description">Jadwal rilis anime per hari (Senin-Minggu)</p>
             </div>
 
-            <div class="endpoint-group">
-                <h2>🚧 Bornime Endpoints (Coming Soon)</h2>
-                <p style="color: #666; font-style: italic;">
-                    Endpoints untuk Bornime sedang dalam tahap development.
-                    Membutuhkan struktur HTML dari bornime.com.
-                </p>
-                <p style="margin-top: 10px; color: #666;">
-                    Semua endpoint akan sama dengan Otakudesu, hanya ganti <code>/a/ota/</code> menjadi <code>/a/bor/</code>
-                </p>
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/anime/unlimited</span>
+                <p class="description">Daftar semua anime dari A-Z tanpa paginasi</p>
             </div>
-        </div>
 
-        <div class="url-pattern">
-            <h3>📚 Dokumentasi Lengkap</h3>
-            <ul style="margin-top: 10px; margin-left: 20px;">
-                <li><strong>hasil-otaku.md</strong> - Dokumentasi Otakudesu dengan contoh response</li>
-                <li><strong>hasil-kuronime.md</strong> - Dokumentasi Kuronime (Coming Soon)</li>
-                <li><strong>hasil-bornime.md</strong> - Dokumentasi Bornime (Coming Soon)</li>
-            </ul>
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/anime/anime/:slug</span>
+                <p class="description">Detail lengkap anime. Contoh: <code>/anime/anime/one-piece-sub-indo</code></p>
+            </div>
+
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/anime/complete-anime/:page</span>
+                <p class="description">Daftar anime tamat. Contoh: <code>/anime/complete-anime/1</code></p>
+            </div>
+
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/anime/ongoing-anime?page=1</span>
+                <p class="description">Daftar anime ongoing dengan pagination</p>
+            </div>
+
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/anime/genre</span>
+                <p class="description">Daftar semua genre yang tersedia</p>
+            </div>
+
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/anime/genre/:slug?page=1</span>
+                <p class="description">Anime berdasarkan genre. Contoh: <code>/anime/genre/action?page=1</code></p>
+            </div>
+
+            <div class="endpoint">
+                <span class="method">GET</span>
+                <span class="path">/anime/episode/:slug</span>
+                <p class="description">Detail episode & link streaming/download</p>
+            </div>
         </div>
 
         <div class="footer">
             <p><strong>API Anime Scraper v1.0</strong></p>
             <p>Built with Express.js, Axios, and Cheerio</p>
-            <p style="margin-top: 10px; font-size: 0.9em;">⚠️ Disclaimer: API ini hanya untuk tujuan edukasi. Hormati hak cipta konten.</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">⚠️ API ini hanya untuk tujuan edukasi</p>
         </div>
     </div>
 </body>
