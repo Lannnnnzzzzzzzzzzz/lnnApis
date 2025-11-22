@@ -42,101 +42,101 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-green-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/home</h3>
+                        <h3 class="text-xl font-bold">/anime/home</h3>
                         <span class="method-badge get">GET</span>
                     </div>
                     <p class="mb-3 text-sm opacity-80">Get latest ongoing and completed anime</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnnapis.vercel.app/home</div>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnnapis.vercel.app/anime/home</div>
                     <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="home-example"></code></pre>
                 </div>
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-blue-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/schedule</h3>
+                        <h3 class="text-xl font-bold">/anime/schedule</h3>
                         <span class="method-badge get">GET</span>
                     </div>
                     <p class="mb-3 text-sm opacity-80">Get anime release schedule by day</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnnapis.vercel.app/schedule</div>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnnapis.vercel.app/anime/schedule</div>
                     <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="schedule-example"></code></pre>
                 </div>
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-purple-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/unlimited</h3>
+                        <h3 class="text-xl font-bold">/anime/unlimited</h3>
                         <span class="method-badge get">GET</span>
                     </div>
                     <p class="mb-3 text-sm opacity-80">Get all anime list from A-Z</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnnapis.vercel.app/unlimited</div>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnnapis.vercel.app/anime/unlimited</div>
                     <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="unlimited-example"></code></pre>
                 </div>
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-pink-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/anime/:slug</h3>
+                        <h3 class="text-xl font-bold">/anime/anime/:slug</h3>
                         <span class="method-badge get">GET</span>
                     </div>
                     <p class="mb-3 text-sm opacity-80">Get anime details and episode list</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/anime/<span class="text-yellow-400">one-piece-sub-indo</span></div>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/anime/anime/<span class="text-yellow-400">one-piece-sub-indo</span></div>
                     <input type="text" class="input-box text-sm" placeholder="Anime slug" value="one-piece-sub-indo" id="anime-input">
-                    <button class="try-button" onclick="tryEndpoint('anime', document.getElementById('anime-input').value, 'anime-example')">Try It</button>
+                    <button class="try-button" onclick="tryEndpoint('anime/anime', document.getElementById('anime-input').value, 'anime-example')">Try It</button>
                     <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="anime-example"></code></pre>
                 </div>
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-yellow-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/complete-anime/:page</h3>
+                        <h3 class="text-xl font-bold">/anime/complete-anime/:page</h3>
                         <span class="method-badge get">GET</span>
                     </div>
                     <p class="mb-3 text-sm opacity-80">Get completed anime with pagination</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/complete-anime/<span class="text-yellow-400">1</span></div>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/anime/complete-anime/<span class="text-yellow-400">1</span></div>
                     <input type="text" class="input-box text-sm" placeholder="Page number" value="1" id="complete-input">
-                    <button class="try-button" onclick="tryEndpoint('complete-anime', document.getElementById('complete-input').value, 'complete-example')">Try It</button>
+                    <button class="try-button" onclick="tryEndpoint('anime/complete-anime', document.getElementById('complete-input').value, 'complete-example')">Try It</button>
                     <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="complete-example"></code></pre>
                 </div>
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-red-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/ongoing-anime</h3>
+                        <h3 class="text-xl font-bold">/anime/ongoing-anime</h3>
                         <span class="method-badge get">GET</span>
                     </div>
                     <p class="mb-3 text-sm opacity-80">Get ongoing anime with pagination</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/ongoing-anime?page=<span class="text-yellow-400">1</span></div>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/anime/ongoing-anime?page=<span class="text-yellow-400">1</span></div>
                     <input type="text" class="input-box text-sm" placeholder="Page number" value="1" id="ongoing-input">
-                    <button class="try-button" onclick="tryEndpoint('ongoing-anime', '?page=' + document.getElementById('ongoing-input').value, 'ongoing-example')">Try It</button>
+                    <button class="try-button" onclick="tryEndpoint('anime/ongoing-anime', '?page=' + document.getElementById('ongoing-input').value, 'ongoing-example')">Try It</button>
                     <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="ongoing-example"></code></pre>
                 </div>
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-indigo-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/genre</h3>
+                        <h3 class="text-xl font-bold">/anime/genre</h3>
                         <span class="method-badge get">GET</span>
                     </div>
                     <p class="mb-3 text-sm opacity-80">Get all available genres</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnnapis.vercel.app/genre</div>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-3">https://lnnapis.vercel.app/anime/genre</div>
                     <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="genre-example"></code></pre>
                 </div>
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-teal-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/genre/:slug</h3>
+                        <h3 class="text-xl font-bold">/anime/genre/:slug</h3>
                         <span class="method-badge get">GET</span>
                     </div>
                     <p class="mb-3 text-sm opacity-80">Get anime by genre with pagination</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/genre/<span class="text-yellow-400">action</span>?page=1</div>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/anime/genre/<span class="text-yellow-400">action</span>?page=1</div>
                     <input type="text" class="input-box text-sm" placeholder="Genre slug" value="action" id="genre-slug-input">
-                    <button class="try-button" onclick="tryEndpoint('genre', document.getElementById('genre-slug-input').value + '?page=1', 'genre-slug-example')">Try It</button>
+                    <button class="try-button" onclick="tryEndpoint('anime/genre', document.getElementById('genre-slug-input').value + '?page=1', 'genre-slug-example')">Try It</button>
                     <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="genre-slug-example"></code></pre>
                 </div>
                 <div class="p-6 shadow-lg rounded-lg border-l-4 border-orange-500 bg-gray-800">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-bold">/episode/:slug</h3>
+                        <h3 class="text-xl font-bold">/anime/episode/:slug</h3>
                         <span class="method-badge get">GET</span>
                     </div>
                     <p class="mb-3 text-sm opacity-80">Get episode details and streaming links</p>
-                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/episode/<span class="text-yellow-400">one-piece-episode-1000-sub-indo</span></div>
+                    <div class="bg-gray-900 p-2 rounded text-sm font-mono text-green-400 mb-2">https://lnnapis.vercel.app/anime/episode/<span class="text-yellow-400">one-piece-episode-1000-sub-indo</span></div>
                     <input type="text" class="input-box text-sm" placeholder="Episode slug" value="one-piece-episode-1000-sub-indo" id="episode-input">
-                    <button class="try-button" onclick="tryEndpoint('episode', document.getElementById('episode-input').value, 'episode-example')">Try It</button>
+                    <button class="try-button" onclick="tryEndpoint('anime/episode', document.getElementById('episode-input').value, 'episode-example')">Try It</button>
                     <h4 class="text-sm font-semibold mt-4 mb-2">Example Response:</h4>
                     <pre class="code-block"><code id="episode-example"></code></pre>
                 </div>
