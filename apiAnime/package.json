@@ -1,0 +1,19 @@
+{
+  "name": "otakudesu-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node scraper.js"
+  },
+  "keywords": ["anime", "scraper", "otakudesu", "kuronime", "bornime"],
+  "author": "",
+  "license": "ISC",
+  "description": "API scraper untuk anime dari otakudesu.best, kuronime.moe, dan bornime.com",
+  "dependencies": {
+    "axios": "^1.7.4",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

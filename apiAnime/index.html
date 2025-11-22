@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Anime - Otakudesu, Kuronime, Bornime</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .endpoints {
+            margin-top: 30px;
+        }
+
+        .endpoint-group {
+            margin-bottom: 30px;
+        }
+
+        .endpoint-group h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #764ba2;
+            transition: all 0.3s ease;
+        }
+
+        .endpoint:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .method {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85em;
+            margin-right: 10px;
+        }
+
+        .path {
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+
+        .description {
+            color: #666;
+            margin-top: 8px;
+            font-size: 0.95em;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            text-align: center;
+            color: #666;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        code {
+            background: #f1f3f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎌 API Anime Scraper</h1>
+        <p class="subtitle">Scraping data anime dari Otakudesu, Kuronime, dan Bornime</p>
+
+        <div class="info">
+            <div style="margin-bottom: 15px;">
+                <span class="badge">Otakudesu.best</span>
+                <span class="badge">Kuronime.moe</span>
+                <span class="badge">Bornime.com</span>
+            </div>
+            <p><strong>Base URL:</strong> <code>https://otakudesu.best</code> (default)</p>
+            <p style="margin-top: 8px;"><strong>Status:</strong> ✅ Active & Ready</p>
+        </div>
+
+        <div class="endpoints">
+            <div class="endpoint-group">
+                <h2>📺 Halaman Utama</h2>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/anime/home</span>
+                    <p class="description">Mendapatkan data dari halaman utama (ongoing & complete anime)</p>
+                </div>
+            </div>
+
+            <div class="endpoint-group">
+                <h2>📅 Jadwal Rilis</h2>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/anime/schedule</span>
+                    <p class="description">Mendapatkan jadwal rilis anime per hari (Senin-Minggu)</p>
+                </div>
+            </div>
+
+            <div class="endpoint-group">
+                <h2>📚 Daftar Anime</h2>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/anime/unlimited</span>
+                    <p class="description">Daftar semua anime dari A-Z tanpa paginasi</p>
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/anime/complete-anime/:page</span>
+                    <p class="description">Daftar anime tamat berdasarkan halaman. Contoh: <code>/anime/complete-anime/1</code></p>
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/anime/ongoing-anime?page=1</span>
+                    <p class="description">Daftar anime yang sedang tayang (ongoing) dengan pagination</p>
+                </div>
+            </div>
+
+            <div class="endpoint-group">
+                <h2>🎭 Genre</h2>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/anime/genre</span>
+                    <p class="description">Daftar semua genre yang tersedia</p>
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/anime/genre/:slug?page=1</span>
+                    <p class="description">Anime berdasarkan genre tertentu dengan pagination. Contoh: <code>/anime/genre/action?page=1</code></p>
+                </div>
+            </div>
+
+            <div class="endpoint-group">
+                <h2>📖 Detail</h2>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/anime/anime/:slug</span>
+                    <p class="description">Mendapatkan detail lengkap sebuah anime. Contoh: <code>/anime/anime/one-piece-sub-indo</code></p>
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/anime/episode/:slug</span>
+                    <p class="description">Detail episode & link streaming/download. Contoh: <code>/anime/episode/one-piece-episode-1000-sub-indo</code></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>API Anime Scraper v1.0</strong></p>
+            <p>Built with Express.js, Axios, and Cheerio</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">⚠️ Disclaimer: API ini hanya untuk tujuan edukasi. Hormati hak cipta konten.</p>
+        </div>
+    </div>
+</body>
+</html>
