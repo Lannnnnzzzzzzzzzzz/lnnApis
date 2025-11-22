@@ -1,0 +1,233 @@
+{
+  "status_testing": {
+    "local_server": "✓ WORKING - All endpoints tested successfully on http://localhost:3000",
+    "production_server": "⚠ REQUIRES DEPLOYMENT - Changes need to be deployed to Vercel",
+    "production_url": "https://apidonghua.vercel.app",
+    "changes_made": [
+      "✓ Removed authentication token from index.html (lines 274-287)",
+      "✓ Updated fetchExample function to use production URLs directly",
+      "✓ Created vercel.json configuration file for Vercel deployment",
+      "✓ Added module.exports to scraper.js for Vercel serverless compatibility",
+      "✓ Added NODE_ENV check to prevent double server listening in production"
+    ],
+    "deployment_notes": "Project is ready for deployment. After pushing to repository, Vercel will automatically deploy and endpoints will be accessible.",
+    "local_test_results": {
+      "/home": "✓ Returns array of latest episodes",
+      "/ongoing": "✓ Returns schedule organized by days (monday-sunday)",
+      "/completed": "✓ Returns array of completed series",
+      "/genres/:genreName": "✓ Returns array of series by genre",
+      "/seri/:endpoint": "✓ Returns series details and episode list",
+      "/episode/:endpoint": "✓ Returns episode details and video link"
+    }
+  },
+  "api_documentation": {
+    "base_url_local": "http://localhost:3000",
+    "base_url_production": "https://apidonghua.vercel.app",
+    "endpoints": {
+      "/home": {
+        "description": "Scrapes latest releases from homepage",
+        "method": "GET",
+        "response_format": "Array of objects",
+        "sample_response": [
+          {
+            "title": "Perfect World Episode 242 Subtitle Indonesia",
+            "href": "/episode/perfect-world-episode-242-subtitle-indonesia/",
+            "image": "https://anichin.cafe/wp-content/uploads/2021/04/Perfect-World.webp",
+            "episode": "Ep 242",
+            "type": "Donghua"
+          },
+          {
+            "title": "Wu Dong Qian Kun Season 6 Episode 02 Subtitle Indonesia",
+            "href": "/episode/wu-dong-qian-kun-season-6-episode-02-subtitle-indonesia/",
+            "image": "https://anichin.cafe/wp-content/uploads/2025/11/WU-DONG-QIAN-KUN-SEASON-6.webp",
+            "episode": "Ep 02",
+            "type": "Donghua"
+          }
+        ]
+      },
+      "/ongoing": {
+        "description": "Scrapes ongoing series schedule organized by day of the week",
+        "method": "GET",
+        "response_format": "Object with days as keys, each containing array of series",
+        "sample_response": {
+          "monday": [
+            {
+              "title": "Wonderland Season 5",
+              "seriesLink": "/seri/wonderland-season-5/",
+              "imageSrc": "https://i1.wp.com/anichin.cafe/wp-content/uploads/2023/08/Wonderland-S5-Ye-Xingyun.jpg?resize=247,350",
+              "episodeCount": "??",
+              "releaseTime": "at 04:45"
+            },
+            {
+              "title": "Peerless Divine Emperor",
+              "seriesLink": "/seri/peerless-divine-emperor/",
+              "imageSrc": "https://anichin.cafe/wp-content/uploads/2025/10/Peerless-Divine-Emperor.webp",
+              "episodeCount": "21",
+              "releaseTime": "at 04:52"
+            }
+          ],
+          "tuesday": [],
+          "wednesday": [],
+          "thursday": [],
+          "friday": [],
+          "saturday": [],
+          "sunday": []
+        }
+      },
+      "/completed/:page?": {
+        "description": "Lists all completed series with optional pagination",
+        "method": "GET",
+        "parameters": {
+          "page": "Optional page number (defaults to 1)"
+        },
+        "example_urls": [
+          "/completed",
+          "/completed/1",
+          "/completed/2"
+        ],
+        "response_format": "Array of objects",
+        "sample_response": [
+          {
+            "title": "Hitori No Shita: The Return of Tetsumaru",
+            "href": "/seri/hitori-no-shita-the-return-of-tetsumaru/",
+            "image": "https://anichin.cafe/wp-content/uploads/2025/09/Yi-Ren-Zhi-Xia-Xiu-Tie-Chong-Xian.webp",
+            "type": "Movie"
+          },
+          {
+            "title": "Legendary Twins: Beyond the Sky",
+            "href": "/seri/legendary-twins-beyond-the-sky/",
+            "image": "https://anichin.cafe/wp-content/uploads/2025/09/Legendary-Twins-Beyond-the-Sky.webp",
+            "type": "Movie"
+          }
+        ]
+      },
+      "/episode/:endpoint": {
+        "description": "Scrapes specific episode details including video link and episode list",
+        "method": "GET",
+        "parameters": {
+          "endpoint": "Episode slug from href (without leading slash)"
+        },
+        "example_url": "/episode/perfect-world-episode-242-subtitle-indonesia",
+        "response_format": "Object with episode details",
+        "sample_response": {
+          "title": "Perfect World Episode 242 Subtitle Indonesia",
+          "video_link": "https://example.com/embed/video",
+          "details": {
+            "mainImage": "https://anichin.cafe/wp-content/uploads/image.webp",
+            "mainTitle": "Perfect World",
+            "alternativeTitle": "Wanmei Shijie",
+            "rating": "8.5",
+            "status": "Ongoing",
+            "network": "Network Name",
+            "studio": "Studio Name",
+            "released": "2021",
+            "duration": "20 min",
+            "season": "Fall 2021",
+            "country": "China",
+            "type": "Donghua",
+            "episodesCount": "242",
+            "fansub": "Fansub Name",
+            "genres": ["Action", "Adventure", "Fantasy"],
+            "description": "Episode description text..."
+          },
+          "episodes": [
+            {
+              "href": "/episode/perfect-world-episode-1-subtitle-indonesia/",
+              "thumbnail": "https://anichin.cafe/wp-content/uploads/thumbnail.webp",
+              "title": "Episode 1",
+              "details": "Release date and info"
+            }
+          ]
+        }
+      },
+      "/seri/:endpoint": {
+        "description": "Scrapes series details and full episode list",
+        "method": "GET",
+        "parameters": {
+          "endpoint": "Series slug"
+        },
+        "example_url": "/seri/perfect-world",
+        "response_format": "Object with series details and episode list",
+        "sample_response": {
+          "details": [
+            {
+              "mainImage": "https://anichin.cafe/wp-content/uploads/image.webp",
+              "mainTitle": "Perfect World",
+              "alternativeTitle": "Wanmei Shijie",
+              "shortDescription": "Brief description...",
+              "rating": "8.5",
+              "followed": "1234",
+              "status": "Ongoing",
+              "network": "Network Name",
+              "studio": "Studio Name",
+              "released": "2021",
+              "duration": "20 min",
+              "season": "Fall 2021",
+              "country": "China",
+              "type": "Donghua",
+              "episodes": "242",
+              "fansub": "Fansub Name",
+              "releasedOn": "2021-10-01",
+              "updatedOn": "2025-11-21",
+              "genres": ["Action", "Adventure", "Fantasy"],
+              "description": "Full series description..."
+            }
+          ],
+          "episode_list": [
+            {
+              "episodeNumber": "242",
+              "episodeTitle": "Episode Title",
+              "episodeLink": "/episode/perfect-world-episode-242-subtitle-indonesia/",
+              "episodeDate": "Nov 21, 2025",
+              "subtitleStatus": "SUBBED"
+            }
+          ]
+        }
+      },
+      "/genres/:genreName": {
+        "description": "Lists all series in a specific genre",
+        "method": "GET",
+        "parameters": {
+          "genreName": "Genre name (e.g., action, adventure, fantasy)"
+        },
+        "example_urls": [
+          "/genres/action",
+          "/genres/adventure",
+          "/genres/fantasy"
+        ],
+        "response_format": "Array of objects",
+        "sample_response": [
+          {
+            "title": "100.000 Years of Refining Qi",
+            "href": "/seri/100-000-years-of-refining-qi/",
+            "image": "https://anichin.cafe/wp-content/uploads/2023/06/100.000-Years-of-Refining-Qi.webp",
+            "type": "Donghua"
+          },
+          {
+            "title": "36 Cavalry",
+            "href": "/seri/36-cavalry/",
+            "image": "https://anichin.cafe/wp-content/uploads/2023/10/Sanshiliu-Qi.webp",
+            "type": "Donghua"
+          }
+        ]
+      }
+    },
+    "notes": {
+      "scraping_target": "https://anichin.cafe",
+      "content_type": "Chinese animation (Donghua)",
+      "updated_selectors": [
+        "Homepage: .listupd.normal .excstf article.bs",
+        "Schedule: .bixbox.schedulepage.sch_{day} .listupd .bs",
+        "Completed: article.bs",
+        "Series: .bigcontent",
+        "Episodes: .eplister ul li",
+        "Genres: article.bs"
+      ],
+      "server_info": {
+        "port": 3000,
+        "framework": "Express.js",
+        "scraping_libraries": ["axios", "cheerio"]
+      }
+    }
+  }
+}
