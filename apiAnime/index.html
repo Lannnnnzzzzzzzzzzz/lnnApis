@@ -163,7 +163,8 @@
         });
         function typeWriter(element, text) { element.textContent = text; Prism.highlightElement(element); }
         async function tryEndpoint(type, param, exampleId) {
-            const url = 'https://lnnapis.vercel.app/' + type + '/' + param;
+            const separator = param.startsWith('?') ? '' : '/';
+            const url = 'https://lnnapis.vercel.app/' + type + separator + param;
             const exampleElement = document.getElementById(exampleId);
             exampleElement.parentElement.classList.add('loading');
             exampleElement.textContent = 'Loading';
