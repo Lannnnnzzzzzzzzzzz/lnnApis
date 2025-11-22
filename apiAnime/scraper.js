@@ -7,9 +7,15 @@ const port = 3000;
 
 const BASE_URL = 'https://otakudesu.best';
 
+const axiosConfig = {
+  headers: {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+  }
+};
+
 async function scrapeHomePage() {
   try {
-    const { data } = await axios.get(BASE_URL);
+    const { data } = await axios.get(BASE_URL, axiosConfig);
     const $ = cheerio.load(data);
 
     const results = {
@@ -70,7 +76,7 @@ async function scrapeHomePage() {
 
 async function scrapeSchedule() {
   try {
-    const { data } = await axios.get(`${BASE_URL}/jadwal-rilis/`);
+    const { data } = await axios.get(`${BASE_URL}/jadwal-rilis/`, axiosConfig);
     const $ = cheerio.load(data);
 
     const schedule = {
@@ -123,7 +129,7 @@ async function scrapeSchedule() {
 
 async function scrapeUnlimited() {
   try {
-    const { data } = await axios.get(`${BASE_URL}/anime-list/`);
+    const { data } = await axios.get(`${BASE_URL}/anime-list/`, axiosConfig);
     const $ = cheerio.load(data);
 
     const results = {};
@@ -161,7 +167,7 @@ async function scrapeUnlimited() {
 async function scrapeAnimeDetail(slug) {
   try {
     const url = `${BASE_URL}/anime/${slug}/`;
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, axiosConfig);
     const $ = cheerio.load(data);
 
     const title = $('.jdlrx h1').text().trim();
@@ -184,8 +190,13 @@ async function scrapeAnimeDetail(slug) {
     });
 
     const genres = [];
-    $('.infozingle p span.genre-info a').each((i, el) => {
-      genres.push($(el).text().trim());
+    $('.infozingle p').each((i, el) => {
+      const text = $(el).text();
+      if (text.includes('Genre')) {
+        $(el).find('a').each((idx, link) => {
+          genres.push($(link).text().trim());
+        });
+      }
     });
 
     const synopsis = $('.sinopc').text().trim();
@@ -228,7 +239,7 @@ async function scrapeCompletedAnime(page = 1) {
       ? `${BASE_URL}/complete-anime/`
       : `${BASE_URL}/complete-anime/page/${page}/`;
 
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, axiosConfig);
     const $ = cheerio.load(data);
 
     const results = [];
@@ -274,7 +285,7 @@ async function scrapeOngoingAnime(page = 1) {
       ? `${BASE_URL}/ongoing-anime/`
       : `${BASE_URL}/ongoing-anime/page/${page}/`;
 
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, axiosConfig);
     const $ = cheerio.load(data);
 
     const results = [];
@@ -316,7 +327,7 @@ async function scrapeOngoingAnime(page = 1) {
 
 async function scrapeGenreList() {
   try {
-    const { data } = await axios.get(`${BASE_URL}/genre-list/`);
+    const { data } = await axios.get(`${BASE_URL}/genre-list/`, axiosConfig);
     const $ = cheerio.load(data);
 
     const genres = [];
@@ -348,21 +359,20 @@ async function scrapeAnimeByGenre(slug, page = 1) {
       ? `${BASE_URL}/genres/${slug}/`
       : `${BASE_URL}/genres/${slug}/page/${page}/`;
 
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, axiosConfig);
     const $ = cheerio.load(data);
 
-    const genreName = $('.listupd .page-title').text().trim();
+    const genreName = $('h1.page-title').text().trim();
     const results = [];
 
-    $('.col-anime .col-anime-con').each((index, element) => {
-      const title = $(element).find('.col-anime-title a').text().trim();
-      const href = $(element).find('.col-anime-title a').attr('href') || '';
+    $('.venz ul li').each((index, element) => {
+      const title = $(element).find('h2.jdlflm').text().trim();
+      const href = $(element).find('.thumbz a').attr('href') || $(element).find('.thumb a').attr('href') || '';
       const animeSlug = href ? href.split('/').filter(Boolean).pop() : '';
-      const imgSrc = $(element).find('.col-anime-cover img').attr('src');
-      const studio = $(element).find('.col-anime-studio').text().trim();
-      const episode = $(element).find('.col-anime-eps').text().trim();
-      const rating = $(element).find('.col-anime-rating').text().trim();
-      const synopsis = $(element).find('.col-synopsis p').text().trim();
+      const imgSrc = $(element).find('.thumbz img').attr('src') || $(element).find('.thumb img').attr('src');
+      const episode = $(element).find('.epz').text().trim();
+      const rating = $(element).find('.epztipe').text().trim();
+      const date = $(element).find('.newnime').text().trim();
 
       if (title) {
         results.push({
@@ -370,10 +380,9 @@ async function scrapeAnimeByGenre(slug, page = 1) {
           slug: animeSlug,
           href,
           image: imgSrc,
-          studio,
           episode,
           rating,
-          synopsis
+          date
         });
       }
     });
@@ -398,7 +407,7 @@ async function scrapeAnimeByGenre(slug, page = 1) {
 async function scrapeEpisodeDetail(slug) {
   try {
     const url = `${BASE_URL}/episode/${slug}/`;
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, axiosConfig);
     const $ = cheerio.load(data);
 
     const title = $('.venutama .posttl').text().trim();
